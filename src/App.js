@@ -1,34 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import Generator from "./components/Generator";
+import Profile from "./components/Profile";
+import { ROUTES } from "./utils/routes";
+import { loadData } from "./utils/localStorage";
 
 function App() {
-  return (
-    <div className="flex flex-col h-full items-center justify-center bg-gray-200 text-gray-700">
-      <div className="flex items-center">
-        <h1 className="text-6xl font-thin tracking-wider">Create React App + Tailwind CSS</h1>
-      </div>
-      <p className="my-6 tracking-wide">
-        Edit <code>src/App.js</code> and save to reload.
-      </p>
-      <div className="mt-6 flex justify-center">
-        <a
-          className="uppercase hover:underline"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <a
-          className="ml-10 uppercase hover:underline"
-          href="https://tailwindcss.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Tailwind
-        </a>
-      </div>
-    </div>
-  );
+  const [page, setPage] = useState();
+  const [resume, setResume] = useState();
+  const [openAiKey, setOpenAiKey] = useState();
+
+  useEffect(() => {
+    const fetchLocalData = async () => {
+      const loadedOpenAiKey = await loadData("openAiKey");
+      const loadedResume = await loadData("resume");
+      setOpenAiKey(loadedOpenAiKey);
+      setResume(loadedResume);
+    };
+    fetchLocalData();
+  }, []);
+
+  switch (page) {
+    case ROUTES.GENERATOR:
+      return (
+        <Generator setPage={setPage} resume={resume} openAiKey={openAiKey} />
+      );
+    case ROUTES.PROFILE:
+      return (
+        <Profile
+          setPage={setPage}
+          resume={resume}
+          setResume={setResume}
+          openAiKey={openAiKey}
+          setOpenAiKey={setOpenAiKey}
+        />
+      );
+    default:
+      return (
+        <Generator setPage={setPage} resume={resume} openAiKey={openAiKey} />
+      );
+  }
 }
 
 export default App;
