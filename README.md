@@ -1,5 +1,7 @@
 # LinkedDont
 
+_An extension for automatically creating Cover Letters for job postings you are viewing on LinkedIn_ 
+
 **This project exists as an exercise for learning how to embed ChatGPT inside of a Chrome Extension, the name LinkedDont is short for 'LinkedDont use this for real.'**
 
 1. _To begin, you need to attach your API Key and navigate your active browser to a LinkedIn job posting._
