@@ -3,10 +3,10 @@ console.log("Service Worker Live");
 const linkedInAccountURL = "https://www.linkedin.com/in/";
 
 const scrapeProfile = () => {
+  // TODO: This sucks, pull relevant text data instead of all of it. 
   const profileContainer = window.document.querySelector(
     `.scaffold-layout__main`
   )
-  console.log(profileContainer)
   const profile = profileContainer.textContent;
   const cleanedProfile = profile.replace(/\s\s+/g, " ");
   return cleanedProfile;
