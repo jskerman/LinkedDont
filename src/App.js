@@ -6,15 +6,15 @@ import { loadData } from "./utils/localStorage";
 
 function App() {
   const [page, setPage] = useState();
-  const [resume, setResume] = useState();
+  const [prompt, setPrompt] = useState();
   const [openAiKey, setOpenAiKey] = useState();
 
   useEffect(() => {
     const fetchLocalData = async () => {
       const loadedOpenAiKey = await loadData("openAiKey");
-      const loadedResume = await loadData("resume");
+      const loadedPrompt = await loadData("prompt");
       setOpenAiKey(loadedOpenAiKey);
-      setResume(loadedResume);
+      setPrompt(loadedPrompt);
     };
     fetchLocalData();
   }, []);
@@ -22,21 +22,21 @@ function App() {
   switch (page) {
     case ROUTES.GENERATOR:
       return (
-        <Generator setPage={setPage} resume={resume} openAiKey={openAiKey} />
+        <Generator setPage={setPage} promptText={prompt} openAiKey={openAiKey} />
       );
     case ROUTES.PROFILE:
       return (
         <Profile
           setPage={setPage}
-          resume={resume}
-          setResume={setResume}
+          promptText={prompt}
+          setPrompt={setPrompt}
           openAiKey={openAiKey}
           setOpenAiKey={setOpenAiKey}
         />
       );
     default:
       return (
-        <Generator setPage={setPage} resume={resume} openAiKey={openAiKey} />
+        <Generator setPage={setPage} promptText={prompt} openAiKey={openAiKey} />
       );
   }
 }

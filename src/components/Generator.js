@@ -11,22 +11,18 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
-  Text,
 } from "@chakra-ui/react";
 import { FaBrain, FaPlus, FaUser } from "react-icons/fa";
 
-const Generator = ({ setPage, resume, openAiKey }) => {
-  const [jobTitle, setJobTitle] = useState();
-  const [jobDescription, setJobDescription] = useState();
-  const [coverLetter, setCoverLetter] = useState();
+const Generator = ({ setPage, promptText, openAiKey }) => {
+  const [profile, setProfile] = useState();
+  const [message, setMessage] = useState();
   const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     const fetchJobData = async () => {
-      const loadedJobTitle = await loadData("jobTitle");
-      const loadedJobDescription = await loadData("jobDescription");
-      setJobTitle(loadedJobTitle);
-      setJobDescription(loadedJobDescription);
+      const profileLoaded = await loadData("profileText");
+      setProfile(profileLoaded);
     };
     fetchJobData();
   }, []);
@@ -34,18 +30,24 @@ const Generator = ({ setPage, resume, openAiKey }) => {
   const onGenerate = async () => {
     try {
       setIsGenerating(true);
-      const message = `Generate a cover letter based on the following resume and job description:\n\nRESUME:\n${resume}\nJOB DESCRIPTION:\n${jobDescription}`;
-      const chatGPTResponse = await postChatGPTMessage(message, openAiKey);
-      setCoverLetter(chatGPTResponse);
+      const promptFull = `
+      USER PROFILE (All textual data from their LinkedIn page, use this info to craft your message)
+      ${profile}
+      ----
+      ${promptText}
+      `;
+      console.log(promptFull);
+      const chatGPTResponse = await postChatGPTMessage(promptFull, openAiKey);
+      setMessage(chatGPTResponse);
     } catch (error) {
       console.error(error);
     } finally {
       setIsGenerating(false);
     }
   };
+
   return (
     <Flex flexDir={"column"} p={4}>
-      {/* Header Section */}
       <Flex
         flexDir={"row"}
         justify={"space-between"}
@@ -59,12 +61,12 @@ const Generator = ({ setPage, resume, openAiKey }) => {
         <Flex flexDir={"row"} gap={2}>
           <Button
             isLoading={isGenerating}
-            isDisabled={!jobTitle || !openAiKey}
+            isDisabled={!profile || !openAiKey}
             rightIcon={<FaBrain />}
             colorScheme="purple"
             onClick={onGenerate}
           >
-            Generate
+            Create Message
           </Button>
           <Button
             onClick={() => setPage(ROUTES.PROFILE)}
@@ -76,7 +78,6 @@ const Generator = ({ setPage, resume, openAiKey }) => {
         </Flex>
       </Flex>
       <Flex flexDir={"column"} gap={2}>
-        {/* Cover Letter Section */}
         {!openAiKey && (
           <Alert status="warning" roundedRight={"md"} variant="left-accent">
             <AlertIcon />
@@ -94,23 +95,25 @@ const Generator = ({ setPage, resume, openAiKey }) => {
             </AlertDescription>
           </Alert>
         )}
-        {jobTitle ? (
+        {profile ? (
           <Alert status="success" roundedRight={"md"} variant="left-accent">
             <AlertIcon />
-            <AlertTitle>Job Posting Found!</AlertTitle>
-            <AlertDescription>{jobTitle}</AlertDescription>
+            <AlertTitle>Account Found!</AlertTitle>
+            <AlertDescription>
+              {profile.slice(0, 100)}...
+            </AlertDescription>
           </Alert>
         ) : (
           <Alert status="warning" roundedRight={"md"} variant="left-accent">
             <AlertIcon />
-            <AlertTitle>No job posting found in the active tab</AlertTitle>
+            <AlertTitle>No account found in the active tab</AlertTitle>
             <AlertDescription display={"flex"} gap={2}>
-              Navigate to a LinkedIn job posting to continue
+              Navigate to a LinkedIn Account to continue
             </AlertDescription>
           </Alert>
         )}
       </Flex>
-      {coverLetter && (
+      {message && (
         <Box
           mt={2}
           bg={"gray.100"}
@@ -119,7 +122,7 @@ const Generator = ({ setPage, resume, openAiKey }) => {
           textAlign={"justify"}
           p={4}
         >
-          {coverLetter}
+          {message}
         </Box>
       )}
     </Flex>

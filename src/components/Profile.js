@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { FaArrowLeft, FaSave } from "react-icons/fa";
 
-const Profile = ({ setPage, resume, setResume, openAiKey, setOpenAiKey }) => {
+const Profile = ({ setPage, promptText, setPrompt, openAiKey, setOpenAiKey }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (e) => {
@@ -21,11 +21,11 @@ const Profile = ({ setPage, resume, setResume, openAiKey, setOpenAiKey }) => {
       setIsSubmitting(true);
       e.preventDefault();
       const formData = new FormData(e.target);
-      const updatedResume = formData.get("resume");
+      const updatedPrompt = formData.get("prompt");
       const updatedOpenAiKey = formData.get("openAiKey");
-      setResume(updatedResume);
+      setPrompt(updatedPrompt);
       setOpenAiKey(updatedOpenAiKey);
-      saveData("resume", updatedResume);
+      saveData("prompt", updatedPrompt);
       saveData("openAiKey", updatedOpenAiKey);
     } catch (error) {
       console.error("Error Submitting Profile Form...");
@@ -76,17 +76,17 @@ const Profile = ({ setPage, resume, setResume, openAiKey, setOpenAiKey }) => {
         </FormControl>
 
         <FormControl isRequired>
-          <FormLabel fontSize={"sm"}>Resume</FormLabel>
+          <FormLabel fontSize={"sm"}>Message Prompt</FormLabel>
           <Textarea
-            id="resume"
-            name="resume"
-            placeholder="I'm Joe Blogs, a Software Engineer from..."
-            defaultValue={resume}
+            id="prompt"
+            name="prompt"
+            placeholder="Write a semi-formal message e  xplaining why we should catch-up..."
+            defaultValue={promptText}
             rows={12}
             size={"sm"}
           />
           <FormHelperText fontSize={"xs"}>
-            We will never share / save your resume.
+            We will never share / save your prompt.
           </FormHelperText>
         </FormControl>
         <Button
