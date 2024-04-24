@@ -7,7 +7,7 @@ const scrapeProfile = () => {
   // TODO: this stuff needs to be in the function scope in extensions, should be able to pass in below
   const NAME_PATH = "/html/body/div[6]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[2]/div[1]/div[1]/span[1]/a/h1"
   const TITLE_PATH = "/html/body/div[6]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[2]/div[1]/div[2]"
-  const ABOUT_PATH = "/html/body/div[6]/div[3]/div/div/div[2]/div/div/main/section[3]/div[3]/div/div/div"
+  const ABOUT_PATH = "/html/body/div[6]/div[3]/div/div/div[2]/div/div/main/section[2]/div[3]/div/div/div/span[1]"
   const CURRENT_EXPERIENCE_PATH = "/html/body/div[5]/div[3]/div/div/div[2]/div/div/main/section[5]/div[3]/ul/li[1]/div/div[2]"
   const getElementByXpath = (path) => document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
   // </stuff>
